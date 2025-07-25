@@ -30,7 +30,7 @@ const Cart = () => {
                   <div className="d-flex align-items-center">
                     <img
                       src={item.image}
-                      alt={item.name}
+                      alt={item.title}
                       style={{
                         width: "60px",
                         height: "60px",
@@ -39,7 +39,7 @@ const Cart = () => {
                       }}
                     />
                     <div>
-                      <h6>{item.name}</h6>
+                      <h6>{item.title}</h6>
                       <small>{item.price}</small>
                     </div>
                   </div>

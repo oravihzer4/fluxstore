@@ -3,10 +3,10 @@ import { FaDiscord, FaGithub, FaEnvelope, FaPhone } from "react-icons/fa";
 
 const Contact: FunctionComponent = () => {
   return (
-    <div className="container py-5">
+    <div className="container p-5">
       <div className="row justify-content-center mb-4">
         <div className="col-md-8 text-center">
-          <h1 className="display-4 fw-bold">Contact Us</h1>
+          <h1>Contact Us</h1>
           <p className="lead text-muted ">
             Let’s connect! Reach out anytime for support, collaboration, or
             community engagement.

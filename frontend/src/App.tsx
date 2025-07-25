@@ -1,15 +1,82 @@
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+// App.tsx
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Contact from "./components/Contact";
 import About from "./components/About";
 import Cart from "./components/Cart";
-import Products from "./components/Products"; // ✅ Replace Home with Products
+import Products from "./components/Products";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import { ToastContainer } from "react-toastify";
 import { CartProvider } from "./Context/CartContext";
+import { AnimatePresence } from "framer-motion";
+import FadePage from "./components/FadePage";
+
+function AppContent() {
+  const location = useLocation();
+
+  return (
+    <AnimatePresence mode="wait">
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path="/"
+          element={
+            <FadePage>
+              <Products />
+            </FadePage>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <FadePage>
+              <Contact />
+            </FadePage>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <FadePage>
+              <About />
+            </FadePage>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <FadePage>
+              <Cart />
+            </FadePage>
+          }
+        />
+        <Route
+          path="/login"
+          element={
+            <FadePage>
+              <Login />
+            </FadePage>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <FadePage>
+              <Register />
+            </FadePage>
+          }
+        />
+      </Routes>
+    </AnimatePresence>
+  );
+}
 
 function App() {
   return (
@@ -17,15 +84,7 @@ function App() {
       <Router>
         <ToastContainer />
         <Navbar />
-        <Routes>
-          <Route path="/" element={<Products />} />{" "}
-          {/* ✅ Show products on home */}
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Routes>
+        <AppContent />
         <Footer />
       </Router>
     </CartProvider>
