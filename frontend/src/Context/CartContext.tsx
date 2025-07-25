@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 
 export interface CartItem {
   id: number;
-  name: string;
+  title: string;
   price: string; // e.g., "$49.99"
   image: string;
   quantity: number;

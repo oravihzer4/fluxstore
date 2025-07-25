@@ -42,13 +42,13 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link text-success" to="/login">
-                Login
+              <Link className="nav-link text-primary" to="/register">
+                Register
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link text-primary" to="/register">
-                Register
+              <Link className="nav-link text-success" to="/login">
+                Login
               </Link>
             </li>
           </ul>

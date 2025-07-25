@@ -1,11 +1,10 @@
 import { useMemo, useState, type FunctionComponent } from "react";
 import { successMassage } from "../Services/FeedbackService";
 import { useCart } from "../Context/CartContext";
-// ⚠️ ודא שהנתיב תואם בדיוק את שם התיקיה: ../context/CartContext או ../Context/CartContext
 
 interface Product {
   id: number;
-  name: string;
+  title: string;
   description: string;
   price: string;
   image?: string;
@@ -17,7 +16,7 @@ const Products: FunctionComponent = () => {
   const initialProducts: Product[] = [
     {
       id: 1,
-      name: "Gaming Mouse",
+      title: "Gaming Mouse",
       description: "High precision RGB gaming mouse.",
       price: "$49.99",
       image:
@@ -25,7 +24,7 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 2,
-      name: "Mechanical Keyboard",
+      title: "Mechanical Keyboard",
       description: "Durable mechanical keyboard with blue switches.",
       price: "$89.99",
       image:
@@ -33,7 +32,7 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 3,
-      name: "Gaming Headset",
+      title: "Gaming Headset",
       description: "Surround sound headset with noise-canceling mic.",
       price: "$69.99",
       image:
@@ -41,7 +40,7 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 4,
-      name: "Mouse Pad",
+      title: "Mouse Pad",
       description: "Large RGB mouse pad with smooth surface.",
       price: "$29.99",
       image:
@@ -49,7 +48,7 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 5,
-      name: "Gaming Chair",
+      title: "Gaming Chair",
       description: "Ergonomic gaming chair with adjustable armrests.",
       price: "$199.99",
       image:
@@ -57,7 +56,7 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 6,
-      name: "Webcam",
+      title: "Webcam",
       description: "1080p HD webcam with built-in microphone.",
       price: "$59.99",
       image:
@@ -65,7 +64,7 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 7,
-      name: "External Hard Drive",
+      title: "External Hard Drive",
       description: "Portable 2TB external hard drive.",
       price: "$89.99",
       image:
@@ -73,7 +72,7 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 8,
-      name: "USB Hub",
+      title: "USB Hub",
       description: "4-port USB hub with fast charging.",
       price: "$19.99",
       image:
@@ -81,14 +80,14 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 9,
-      name: "Gaming Monitor",
+      title: "Gaming Monitor",
       description: "27-inch 144Hz gaming monitor with G-Sync.",
       price: "$299.99",
       image: "https://tzilzul.co.il/wp-content/uploads/2023/02/6KN895373.jpg",
     },
     {
       id: 10,
-      name: "VR Headset",
+      title: "VR Headset",
       description: "High-end VR headset with motion controllers.",
       price: "$399.99",
       image:
@@ -96,7 +95,7 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 11,
-      name: "Gaming Laptop",
+      title: "Gaming Laptop",
       description: "High-performance gaming laptop with RTX 3060.",
       price: "$1299.99",
       image:
@@ -104,21 +103,21 @@ const Products: FunctionComponent = () => {
     },
     {
       id: 12,
-      name: "Gaming Console",
+      title: "Gaming Console",
       description: "Next-gen gaming console with 4K support.",
       price: "$499.99",
       image: "",
     },
     {
       id: 13,
-      name: "Game Controller",
+      title: "Game Controller",
       description: "Wireless game controller with customizable buttons.",
       price: "$39.99",
       image: "",
     },
     {
       id: 14,
-      name: "Gaming Speakers",
+      title: "Gaming Speakers",
       description: "High-quality gaming speakers with deep bass.",
       price: "$79.99",
       image: "",
@@ -126,7 +125,7 @@ const Products: FunctionComponent = () => {
 
     {
       id: 15,
-      name: "Gaming Desk",
+      title: "Gaming Desk",
       description: "Spacious gaming desk with cable management.",
       price: "$249.99",
       image: "",
@@ -134,7 +133,7 @@ const Products: FunctionComponent = () => {
 
     {
       id: 16,
-      name: "Gaming Backpack",
+      title: "Gaming Backpack",
       description: "Durable backpack with compartments for gaming gear.",
       price: "$59.99",
       image: "",
@@ -160,7 +159,7 @@ const Products: FunctionComponent = () => {
     if (!term) return products;
     return products.filter(
       (p) =>
-        p.name.toLowerCase().includes(term) ||
+        p.title.toLowerCase().includes(term) ||
         p.description.toLowerCase().includes(term)
     );
   }, [products, searchTerm]);
@@ -194,7 +193,7 @@ const Products: FunctionComponent = () => {
             <div className="card h-100 shadow-sm">
               <img
                 src={product.image?.trim() ? product.image : DEFAULT_IMAGE}
-                alt={product.name}
+                alt={product.title}
                 style={{ height: "300px", objectFit: "cover" }}
                 onError={(e) => {
                   const target = e.currentTarget as HTMLImageElement;
@@ -204,7 +203,7 @@ const Products: FunctionComponent = () => {
                 }}
               />
               <div className="card-body">
-                <h5>{product.name}</h5>
+                <h5>{product.title}</h5>
                 <p>{product.description}</p>
                 <div className="d-flex justify-content-between align-items-center">
                   <span className="fw-bold">{product.price}</span>
@@ -216,7 +215,7 @@ const Products: FunctionComponent = () => {
                         image: product.image || DEFAULT_IMAGE,
                         quantity: 1,
                       });
-                      successMassage(`${product.name} added to cart!`);
+                      successMassage(`${product.title} added to cart!`);
                     }}
                   >
                     Add to Cart
