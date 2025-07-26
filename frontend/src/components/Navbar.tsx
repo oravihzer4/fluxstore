@@ -1,62 +1,74 @@
-import type { FunctionComponent } from "react";
+import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
 
-interface NavbarProps {}
+const FluxNavbar = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState("user");
 
-const Navbar: FunctionComponent<NavbarProps> = () => {
+  useEffect(() => {
+    const token = localStorage.getItem("x-auth-token");
+    if (token) {
+      setIsLoggedIn(true);
+      const storedName = localStorage.getItem("user-name");
+      setUserName(storedName ?? "user");
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light px-3">
-      <div className="container-fluid">
-        <Link
+    <Navbar expand="lg" bg="light" variant="light" className="px-3">
+      <Container fluid>
+        <Navbar.Brand
+          as={Link}
           to="/"
-          className="navbar-brand  d-flex align-items-center gap-1 py-1 px-2 text-decoration-none"
+          className="d-flex align-items-center gap-1"
         >
           <i className="fa-brands fa-slack opacity-75"></i>
           <span>flux.</span>
-        </Link>
+        </Navbar.Brand>
 
-        <button
-          className="navbar-toggler ms-auto"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-          aria-controls="navbarNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span className="navbar-toggler-icon"></span>
-        </button>
+        <Navbar.Toggle aria-controls="navbar-nav" />
+        <Navbar.Collapse id="navbar-nav" className="justify-content-center">
+          <Nav className="text-center gap-2 mx-auto">
+            <Nav.Link as={Link} to="/cart">
+              Cart
+            </Nav.Link>
+            <Nav.Link as={Link} to="/contact">
+              Contact
+            </Nav.Link>
 
-        <div
-          className="collapse navbar-collapse justify-content-center"
-          id="navbarNav"
-        >
-          <ul className="navbar-nav flex-row flex-lg-row gap-lg-3 text-center">
-            <li className="nav-item">
-              <Link className="nav-link" to="/cart">
-                Cart
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/contact">
-                Contact
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link text-primary" to="/register">
-                Register
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link text-success" to="/login">
-                Login
-              </Link>
-            </li>
-          </ul>
+            {!isLoggedIn ? (
+              <>
+                <Nav.Link as={Link} to="/register" className="text-primary">
+                  Register
+                </Nav.Link>
+                <Nav.Link as={Link} to="/login" className="text-success">
+                  Login
+                </Nav.Link>
+              </>
+            ) : (
+              <Nav.Link as={Link} to="/myprofile" className="text-dark">
+                My Profile
+              </Nav.Link>
+            )}
+          </Nav>
+        </Navbar.Collapse>
+        <div className="d-flex align-items-center gap-2">
+          {isLoggedIn && (
+            <Link
+              to="/myprofile"
+              className="text-success text-decoration-none d-flex align-items-center gap-1"
+            >
+              <span>hi, {userName}</span>
+              <i className="fa-solid fa-earth-americas wave p-1"></i>
+            </Link>
+          )}
         </div>
-      </div>
-    </nav>
+      </Container>
+    </Navbar>
   );
 };
 
-export default Navbar;
+export default FluxNavbar;

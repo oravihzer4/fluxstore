@@ -14,6 +14,9 @@ const Products: FunctionComponent = () => {
 
   const { addItem } = useCart();
 
+  // Check if user is logged in by presence of token
+  const isLoggedIn = Boolean(localStorage.getItem("x-auth-token"));
+
   const handleSort = (direction: "asc" | "desc") => {
     const sorted = [...products].sort((a, b) => {
       const priceA = parseFloat(a.price.replace("$", ""));
@@ -74,19 +77,21 @@ const Products: FunctionComponent = () => {
                 <p>{product.description}</p>
                 <div className="d-flex justify-content-between align-items-center">
                   <span className="fw-bold">{product.price}</span>
-                  <button
-                    className="btn btn-sm btn-outline-dark"
-                    onClick={() => {
-                      addItem({
-                        ...product,
-                        image: product.image || DEFAULT_IMAGE,
-                        quantity: 1,
-                      });
-                      successMassage(`${product.title} added to cart!`);
-                    }}
-                  >
-                    Add to Cart
-                  </button>
+                  {isLoggedIn && (
+                    <button
+                      className="btn btn-sm btn-outline-dark"
+                      onClick={() => {
+                        addItem({
+                          ...product,
+                          image: product.image || DEFAULT_IMAGE,
+                          quantity: 1,
+                        });
+                        successMassage(`${product.title} added to cart!`);
+                      }}
+                    >
+                      Add to Cart
+                    </button>
+                  )}
                 </div>
               </div>
             </div>

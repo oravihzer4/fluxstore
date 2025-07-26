@@ -18,6 +18,8 @@ import { ToastContainer } from "react-toastify";
 import { CartProvider } from "./Context/CartContext";
 import { AnimatePresence } from "framer-motion";
 import FadePage from "./components/FadePage";
+import NotFound from "./components/NotFound";
+import MyProfile from "./components/MyProfile";
 
 function AppContent() {
   const location = useLocation();
@@ -78,6 +80,24 @@ function AppContent() {
           element={
             <FadePage>
               <Register />
+            </FadePage>
+          }
+        />
+
+        <Route
+          path="myprofile"
+          element={
+            <FadePage>
+              <MyProfile />
+            </FadePage>
+          }
+        />
+
+        <Route
+          path="*"
+          element={
+            <FadePage>
+              <NotFound />
             </FadePage>
           }
         />

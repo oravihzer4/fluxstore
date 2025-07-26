@@ -35,3 +35,22 @@ body {
   min-height: 100vh;
   margin: 0;
 }
+.wave {
+  display: inline-block;
+  animation: spin-animation 1.5s linear infinite;
+  font-size: 1rem;
+}
+
+@keyframes spin-animation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.hi-icon .text {
+  font-size: 1.5rem;
+  font-weight: bold;
+}

@@ -1,5 +1,5 @@
 import type { FunctionComponent } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik, type FormikValues } from "formik";
 import { successMassage } from "../Services/FeedbackService";
@@ -7,7 +7,6 @@ import { successMassage } from "../Services/FeedbackService";
 interface LoginProps {}
 
 const Login: FunctionComponent<LoginProps> = () => {
-  const navigate = useNavigate();
   const formik: FormikValues = useFormik({
     initialValues: {
       email: "",
@@ -23,73 +22,71 @@ const Login: FunctionComponent<LoginProps> = () => {
         .matches(/^(?=.*[!@#$%^&*(),.?":{}|<>]).*$/),
     }),
     onSubmit: (values, { resetForm }) => {
-      console.log(values);
-      navigate("/");
+      localStorage.setItem("x-auth-token", "dummy-token");
       resetForm();
       successMassage("Login successful! Welcome back.");
+      window.location.href = "/"; // <-- full app reload here
     },
   });
+
   return (
-    <>
-      <div className="container">
-        <form
-          className="d-flex flex-column align-items-center justify-content-center p-5"
-          onSubmit={formik.handleSubmit}
-        >
-          <h1>Login</h1>
-          <div className="mb-3 w-50">
-            <label htmlFor="email" className="form-label">
-              Email
-            </label>
-            <input
-              type="email"
-              className="form-control"
-              id="email"
-              aria-describedby="emailHelp"
-              autoComplete="off"
-              name="email"
-              onChange={formik.handleChange}
-              value={formik.values.email}
-              onBlur={formik.handleBlur}
-              required
-            />
-            {formik.touched.email && formik.errors.email ? (
-              <div className="text-danger">{formik.errors.email}</div>
-            ) : null}
-          </div>
-          <div className="mb-3 w-50">
-            <label htmlFor="password" className="form-label">
-              Password
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              name="password"
-              autoComplete="off"
-              onChange={formik.handleChange}
-              value={formik.values.password}
-              onBlur={formik.handleBlur}
-              required
-            />
-            {formik.touched.password && formik.errors.password ? (
-              <div className="text-danger">{formik.errors.password}</div>
-            ) : null}
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Submit
-          </button>
-          <br />
-          <br />
-          <p>
-            Don't have an account?{" "}
-            <Link to="/register" className="text-primary">
-              Register here
-            </Link>
-          </p>
-        </form>
-      </div>
-    </>
+    <div className="container">
+      <form
+        className="d-flex flex-column align-items-center justify-content-center p-5"
+        onSubmit={formik.handleSubmit}
+      >
+        <h1>Login</h1>
+        <div className="mb-3 w-50">
+          <label htmlFor="email" className="form-label">
+            Email
+          </label>
+          <input
+            type="email"
+            className="form-control"
+            id="email"
+            aria-describedby="emailHelp"
+            autoComplete="off"
+            name="email"
+            onChange={formik.handleChange}
+            value={formik.values.email}
+            onBlur={formik.handleBlur}
+            required
+          />
+          {formik.touched.email && formik.errors.email ? (
+            <div className="text-danger">{formik.errors.email}</div>
+          ) : null}
+        </div>
+        <div className="mb-3 w-50">
+          <label htmlFor="password" className="form-label">
+            Password
+          </label>
+          <input
+            type="password"
+            className="form-control"
+            id="password"
+            name="password"
+            autoComplete="off"
+            onChange={formik.handleChange}
+            value={formik.values.password}
+            onBlur={formik.handleBlur}
+            required
+          />
+          {formik.touched.password && formik.errors.password ? (
+            <div className="text-danger">{formik.errors.password}</div>
+          ) : null}
+        </div>
+        <button type="submit" className="btn btn-primary">
+          Submit
+        </button>
+        <br />
+        <p>
+          Don't have an account?{" "}
+          <Link to="/register" className="text-primary">
+            Register here
+          </Link>
+        </p>
+      </form>
+    </div>
   );
 };
 

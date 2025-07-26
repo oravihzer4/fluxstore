@@ -4,6 +4,19 @@ import { useCart } from "../Context/CartContext";
 const Cart = () => {
   const { items, removeItem, updateQty, clearCart, cartTotal } = useCart();
 
+  const isLoggedIn = Boolean(localStorage.getItem("x-auth-token"));
+
+  if (!isLoggedIn) {
+    return (
+      <div className="container my-5 text-center">
+        <h3>You have to register to buy something, you know...</h3>
+        <Link to="/register" className="btn btn-primary mt-3">
+          Register Now
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="container my-4">
