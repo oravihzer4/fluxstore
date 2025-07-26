@@ -11,11 +11,11 @@ const Cart = () => {
         {items.length === 0 ? (
           <p className="text-center text-muted">
             <p>
-              Your cart is empty Add some amazing gaming gear to get started!
+              Your cart is empty. Add some amazing gaming gear to get started!
             </p>
             <br />
             <br />
-            <Link to="/" className=" text-dark ">
+            <Link to="/" className="text-dark">
               <h4>Continue Shopping</h4>
             </Link>
           </p>
@@ -40,7 +40,7 @@ const Cart = () => {
                     />
                     <div>
                       <h6>{item.title}</h6>
-                      <small>{item.price}</small>
+                      <small>${Number(item.price).toFixed(2)}</small>
                     </div>
                   </div>
                   <div className="d-flex align-items-center gap-2">
@@ -67,19 +67,16 @@ const Cart = () => {
                 </div>
               ))}
             </div>
-            <div className="d-flex justify-content-between ">
+            <div className="d-flex justify-content-between align-items-center">
               <h4>Total: ${cartTotal.toFixed(2)}</h4>
-              <button
-                className="btn btn-primary"
-                onClick={() =>
-                  alert("Checkout functionality not implemented yet!")
-                }
-              >
-                Checkout
-              </button>
-              <button className="btn btn-danger" onClick={clearCart}>
-                Clear Cart
-              </button>
+              <div className="d-flex gap-2">
+                <Link to="/checkout" className="btn btn-primary">
+                  Checkout
+                </Link>
+                <button className="btn btn-danger" onClick={clearCart}>
+                  Clear Cart
+                </button>
+              </div>
             </div>
           </>
         )}

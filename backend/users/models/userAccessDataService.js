@@ -1,3 +1,4 @@
+const { generateAuthToken } = require("../../auth/providers/jwt");
 const User = require("./mongodb/User");
 
 // Register new User
@@ -39,4 +40,22 @@ const deleteUser = async (id) => {
     throw new Error(`Mongoose: ${error.message}`);
   }
 };
-module.exports = { registerUser, getUser, getAllUsers, deleteUser };
+// Login User
+
+const loginUser = async (email, password) => {
+  try {
+    const userFromDB = await User.findOne({ email });
+    if (!userFromDB) {
+      throw new Error("Authentication Error: User not exist");
+    }
+    if (userFromDB.password !== password) {
+      throw new Error("Authentication Error: Invalid password");
+    }
+    const token = generateAuthToken(userFromDB);
+    return token;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+module.exports = { registerUser, getUser, getAllUsers, deleteUser, loginUser };

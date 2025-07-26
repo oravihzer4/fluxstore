@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 export interface CartItem {
   id: number;
   title: string;
-  price: string; // e.g., "$49.99"
+  price: number; // 🟢 price as number instead of string
   image: string;
   quantity: number;
 }
@@ -21,7 +21,9 @@ type CartAction =
 
 const CartContext = createContext<{
   items: CartItem[];
-  addItem: (item: CartItem) => void;
+  addItem: (
+    item: CartItem | (Omit<CartItem, "price"> & { price: string })
+  ) => void;
   removeItem: (id: number) => void;
   updateQty: (id: number, delta: number) => void;
   clearCart: () => void;
@@ -37,8 +39,9 @@ const CartContext = createContext<{
   cartCount: 0,
 });
 
-const parsePrice = (price: string): number =>
-  parseFloat(price.replace("$", ""));
+// ✂️ Parse "$49.99" → 49.99
+const parsePrice = (price: string | number): number =>
+  typeof price === "string" ? parseFloat(price.replace("$", "")) : price;
 
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
@@ -83,15 +86,28 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(cartReducer, { items: [] }, () => {
     const saved = localStorage.getItem("cart");
-    return saved ? { items: JSON.parse(saved) } : { items: [] };
+    return saved
+      ? {
+          items: JSON.parse(saved).map((item: any) => ({
+            ...item,
+            price: parsePrice(item.price),
+          })),
+        }
+      : { items: [] };
   });
 
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(state.items));
   }, [state.items]);
 
-  const addItem = (item: CartItem) =>
+  const addItem = (rawItem: any) => {
+    const item: CartItem = {
+      ...rawItem,
+      price: parsePrice(rawItem.price),
+    };
     dispatch({ type: "ADD_ITEM", payload: item });
+  };
+
   const removeItem = (id: number) =>
     dispatch({ type: "REMOVE_ITEM", payload: id });
   const updateQty = (id: number, delta: number) =>
@@ -99,7 +115,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const clearCart = () => dispatch({ type: "CLEAR_CART" });
 
   const cartTotal = state.items.reduce((total: number, item: CartItem) => {
-    return total + parsePrice(item.price) * item.quantity;
+    return total + item.price * item.quantity;
   }, 0);
 
   const cartCount = state.items.reduce((count: number, item: CartItem) => {

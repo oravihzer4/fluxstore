@@ -42,3 +42,9 @@ to post new product send object :
     }
 
 }
+to login user send object :
+on path : localhost:8182/users/login
+{
+        "email":"LOLA@gmail.com",
+    "password": "Abcdefg123!"
+}

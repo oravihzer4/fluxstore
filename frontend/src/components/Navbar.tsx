@@ -11,6 +11,7 @@ const Navbar: FunctionComponent<NavbarProps> = () => {
           to="/"
           className="navbar-brand  d-flex align-items-center gap-1 py-1 px-2 text-decoration-none"
         >
+          <i className="fa-brands fa-slack opacity-75"></i>
           <span>flux.</span>
         </Link>
 

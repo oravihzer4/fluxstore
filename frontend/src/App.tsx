@@ -1,4 +1,3 @@
-// App.tsx
 import {
   Route,
   BrowserRouter as Router,
@@ -14,6 +13,7 @@ import Cart from "./components/Cart";
 import Products from "./components/Products";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import Checkout from "./components/Checkout"; // ✅ הוספנו את Checkout
 import { ToastContainer } from "react-toastify";
 import { CartProvider } from "./Context/CartContext";
 import { AnimatePresence } from "framer-motion";
@@ -54,6 +54,14 @@ function AppContent() {
           element={
             <FadePage>
               <Cart />
+            </FadePage>
+          }
+        />
+        <Route
+          path="/checkout" // ✅ הוספנו את ה-Route הזה
+          element={
+            <FadePage>
+              <Checkout />
             </FadePage>
           }
         />
