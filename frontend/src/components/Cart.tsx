@@ -9,8 +9,10 @@ const Cart = () => {
   if (!isLoggedIn) {
     return (
       <div className="container my-5 text-center">
-        <h3>You have to register to buy something, you know...</h3>
-        <Link to="/register" className="btn btn-primary mt-3">
+        <h3>No account, no loot — sign up and start collecting the best! </h3>
+        <br />
+        <br />
+        <Link to="/register" className="btn btn-primary mt-3 animated-btn">
           Register Now
         </Link>
       </div>
