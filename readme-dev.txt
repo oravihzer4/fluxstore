@@ -1,5 +1,6 @@
 
 to post new product send object : 
+on path : localhost:8182/products/
 
 {
     "title":"blabla",
@@ -18,31 +19,34 @@ to post new product send object :
 
 
  to create new user send object : 
+on path : localhost:8182/users/
  {
     "name":{
-        "first" : "Or",
-        "middle": "Raziel",
-        "last": "Avikzer"
+        "first" : "First",
+        "middle": "Middle",
+        "last": "Last"
     },
-    "phone":"0545920145",
-    "email":"oravihzer4@gmail.com",
+    "phone":"0000000000",
+    "email":"email@mail.com",
     "password": "Abcdefg123!",
     "image": {
-        "url":"https://art.pixilart.com/b3679033fcbf417.png",
+        "url":"Image Url",
         "alt":""
     } ,
     "address" : {
-        "state":"Israel",
-        "country":"IL",
-        "city":"RSHLZ",
-        "street":"Jerusalem",
-        "houseNumber":71,
-        "zipCode":130000
+        "state":"state",
+        "country":"country",
+        "city":"city",
+        "street":"street",
+        "houseNumber":111,
+        "zipCode":000000
     }
 
 }
 to login user send object :
 on path : localhost:8182/users/login
+
+(adminuser below)
 {
         "email":"LOLA@gmail.com",
     "password": "Abcdefg123!"
