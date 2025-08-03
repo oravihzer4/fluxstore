@@ -1,44 +1,27 @@
 # fluxstore
 
-חנות דיגיטלית מבוססת TypeScript ו-JavaScript.
+A simple online store built with TypeScript and JavaScript.  
+This project is still a work in progress—lots of stuff to improve and add.
 
-## תיאור הפרויקט
+## What’s inside?
 
-fluxstore הוא פרויקט חנות אונליין המאפשר ניהול מוצרים, הזמנות, משתמשים ועוד. הפרויקט כתוב ב-TypeScript ו-JavaScript ומשלב טכנולוגיות מודרניות לפיתוח אתרים.
+- Product pages and basic management
+- Simple order system
+- User management
+- Minimal design
 
-## טכנולוגיות עיקריות
+## How to run?
 
-- **TypeScript**
-- **JavaScript**
-- **CSS**
-- **HTML**
+```bash
+git clone https://github.com/oravihzer4/fluxstore.git
+npm install
+npm start
+```
 
-## הוראות התקנה
+## Contributing & Improvements
 
-1. שיבט את הריפוזיטורי:
-   ```bash
-   git clone https://github.com/oravihzer4/fluxstore.git
-   ```
-2. התקן את התלויות:
-   ```bash
-   npm install
-   ```
-3. הפעל את הפרויקט:
-   ```bash
-   npm start
-   ```
+Open to suggestions, fixes, and improvements!  
+If you find a bug or have an idea, I’d love to hear it.  
+Feel free to open an Issue or send a Pull Request.
 
-## שימושים עיקריים
-
-- ניהול מוצרים בחנות
-- מערכת הזמנות
-- ניהול משתמשים
-- ממשק ניהול נוח
-
-## תרומה
-
-נשמח לקבל Pull Requests ותיקונים! פתחו Issues במקרה של באגים או בקשות לשיפורים.
-
-## רישיון
-
-הפרויקט מופץ תחת רישיון MIT.
+---
