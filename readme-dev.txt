@@ -1,4 +1,3 @@
-table of contents - dev
 
 to post new product send object : 
 
