@@ -22,7 +22,6 @@ const Login: FunctionComponent<LoginProps> = () => {
         .matches(/^(?=.*[!@#$%^&*(),.?":{}|<>]).*$/),
     }),
     onSubmit: (values, { resetForm }) => {
-      loginUser(values);
       console.log(values);
       localStorage.setItem("x-auth-token", "dummy-token");
       successMassage("Login successful! Welcome back.");
@@ -95,6 +94,3 @@ const Login: FunctionComponent<LoginProps> = () => {
 };
 
 export default Login;
-function loginUser(values: { email: string; password: string }) {
-  throw new Error("Function not implemented.");
-}

@@ -8,7 +8,6 @@ interface FooterProps {}
 const Footer: FunctionComponent<FooterProps> = () => {
   const navigate = useNavigate();
   const [showBanner, setShowBanner] = useState(false);
-  const [showAd, setShowAd] = useState(true);
 
   useEffect(() => {
     const token = localStorage.getItem("x-auth-token");
@@ -20,10 +19,6 @@ const Footer: FunctionComponent<FooterProps> = () => {
   const handleRegisterClick = () => {
     setShowBanner(false);
     navigate("/register");
-  };
-
-  const handleAdClick = () => {
-    setShowAd(false);
   };
 
   return (
