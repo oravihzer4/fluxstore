@@ -18,15 +18,21 @@ const FluxNavbar = () => {
   }, []);
 
   return (
-    <Navbar expand="lg" bg="light" variant="light" className="px-3">
+    <Navbar
+      expand="lg"
+      bg="light"
+      variant="light"
+      className="px-3 position-sticky top-0 shadow-sm"
+      style={{ zIndex: 1030 }}
+    >
       <Container fluid>
         <Navbar.Brand
           as={Link}
           to="/"
           className="d-flex align-items-center gap-1"
         >
-          <i className="fa-brands fa-slack opacity-75"></i>
-          <span>flux.</span>
+          <i className="fa-brands fa-slack fa-spin m-1 opacity-75 "></i>
+          <span> flux.</span>
         </Navbar.Brand>
 
         <Navbar.Toggle aria-controls="navbar-nav" />

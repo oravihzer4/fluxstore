@@ -7,7 +7,7 @@ const MyProfile: FunctionComponent<MyProfileProps> = () => {
     const confirmLogout = window.confirm("Are you sure you want to log out?");
     if (confirmLogout) {
       localStorage.removeItem("x-auth-token");
-      window.location.href = "/"; // force full app reload
+      window.location.href = "/";
     }
   };
 
@@ -24,8 +24,8 @@ const MyProfile: FunctionComponent<MyProfileProps> = () => {
                 width="100"
                 height="100"
               />
-              <h4 className="mb-0">Or Avihzer</h4>
-              <p className="text-muted">or@example.com</p>
+              <h4 className="mb-0">User Name</h4>
+              <p className="text-muted">email@example.com</p>
             </div>
 
             <hr />
@@ -52,10 +52,10 @@ const MyProfile: FunctionComponent<MyProfileProps> = () => {
               <h5 className="mb-3">Account Information</h5>
               <div className="bg-light p-3 rounded-3">
                 <p className="mb-1">
-                  <strong>Username:</strong> or.avihzer
+                  <strong>Username:</strong> user.name123
                 </p>
                 <p className="mb-1">
-                  <strong>Email:</strong> or@example.com
+                  <strong>Email:</strong> email@example.com
                 </p>
                 <p className="mb-1">
                   <strong>Joined:</strong> Jan 1, 2024

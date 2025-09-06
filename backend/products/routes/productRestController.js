@@ -6,11 +6,19 @@ const {
   updateProduct,
   deleteProduct,
 } = require("../models/productsAccessDataService");
+const auth = require("../../auth/authService");
 
 const router = express.Router();
+
 // Create New Product
-router.post("/", async (req, res) => {
+router.post("/", auth, async (req, res) => {
   try {
+    const userInfo = req.user;
+    if (!userInfo.isAdmin) {
+      return res
+        .status(403)
+        .send("Access Denied: Admins Only Allowed To Create Products");
+    }
     let product = await createProduct(req.body);
     res.status(201).send(product);
   } catch (error) {
@@ -38,19 +46,33 @@ router.get("/:id", async (req, res) => {
 });
 
 //update product
-router.put("/:id", async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
-    let product = await updateProduct(id, req.body);
-    res.status(200).send(product);
+    const updatedCard = req.body;
+    let userInfo = req.user;
+    if (!userInfo.isAdmin) {
+      return res
+        .status(403)
+        .send("Access Denied: Admins Only Allowed To Update Products");
+    }
+    let product = await updateProduct(id, updatedCard);
+    res.status(201).send(product);
   } catch (error) {
     res.status(400).send(error.message);
   }
 });
+
 // Delete Product
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
+    const userInfo = req.user;
+    if (!userInfo.isAdmin) {
+      return res
+        .status(403)
+        .send("Access Denied: Admins Only Allowed To Delete Products");
+    }
     let product = await deleteProduct(id);
     res.status(200).send(product);
   } catch (error) {

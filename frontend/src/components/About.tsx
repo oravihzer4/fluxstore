@@ -6,7 +6,6 @@ const About: FunctionComponent = () => {
     <footer className="bg-light text-light pt-5 pb-4 mt-5 ">
       <div className="container m">
         <div className="row text-center text-md-start">
-          {/* Brand + Description */}
           <div className="col-md-4 mb-4">
             <h4 className="fw-bold text-dark ">flux.</h4>
             <p className="text-muted">
@@ -15,7 +14,6 @@ const About: FunctionComponent = () => {
             </p>
           </div>
 
-          {/* Shop Section */}
           <div className="col-md-2 mb-4">
             <h5 className="fw-bold mb-3">Shop</h5>
             <ul className="list-unstyled">
@@ -42,7 +40,6 @@ const About: FunctionComponent = () => {
             </ul>
           </div>
 
-          {/* Support Section */}
           <div className="col-md-2 mb-4">
             <h5 className="fw-bold mb-3">Support</h5>
             <ul className="list-unstyled">
@@ -69,7 +66,6 @@ const About: FunctionComponent = () => {
             </ul>
           </div>
 
-          {/* Connect Section */}
           <div className="col-md-4 mb-4">
             <h5 className="fw-bold mb-3">Connect</h5>
             <div className="d-flex gap-3 justify-content-center justify-content-md-start">

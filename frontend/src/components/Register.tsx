@@ -27,7 +27,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
       password: "",
       confirmPassword: "",
       imageUrl: "",
-      isBusiness: false,
+      pushNot: true,
     },
     validationSchema: yup.object({
       firstName: yup.string().required("First name is required"),
@@ -260,23 +260,23 @@ const Register: FunctionComponent<RegisterProps> = () => {
           )}
         </div>
 
-        {/* isBusiness */}
+        {/* pushNot */}
         <div className="form-check mb-3 w-50">
           <input
             type="checkbox"
             className="form-check-input"
-            id="isBusiness"
-            name="isBusiness"
+            id="pushNot"
+            name="pushNot"
+            value={formik.values.pushNot}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            checked={formik.values.isBusiness}
+            checked={formik.values.pushNot}
           />
-          <label className="form-check-label" htmlFor="isBusiness">
-            Business Account
+          <label className="form-check-label" htmlFor="pushNot">
+            Receive Push Notifications
           </label>
           <p className="text-secondary opacity-75 mt-1">
-            * Optional, check if you want to register as a business account for
-            posting your own products.
+            You can change this later in your account settings.
           </p>
         </div>
 

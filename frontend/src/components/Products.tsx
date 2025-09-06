@@ -14,7 +14,6 @@ const Products: FunctionComponent = () => {
 
   const { addItem } = useCart();
 
-  // Check if user is logged in by presence of token
   const isLoggedIn = Boolean(localStorage.getItem("x-auth-token"));
 
   const handleSort = (direction: "asc" | "desc") => {
@@ -38,6 +37,8 @@ const Products: FunctionComponent = () => {
 
   return (
     <div className="container my-4">
+      <hr />
+
       <div className="d-flex flex-column flex-md-row justify-content-center align-items-center gap-2 mb-4">
         <input
           type="text"
@@ -97,10 +98,6 @@ const Products: FunctionComponent = () => {
             </div>
           </div>
         ))}
-
-        {filteredProducts.length === 0 && (
-          <div className="text-center text-muted py-5">No products found.</div>
-        )}
       </div>
     </div>
   );

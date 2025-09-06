@@ -6,6 +6,7 @@ const {
   deleteUser,
   loginUser,
 } = require("../models/userAccessDataService");
+const auth = require("../../auth/authService");
 const router = express.Router();
 
 // Create New User
@@ -20,10 +21,16 @@ router.post("/", async (req, res) => {
 });
 
 // Get User by ID
-router.get("/:id", async (req, res) => {
+router.get("/:id", auth, async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await getUser(id);
+    let userInfo = req.user;
+    let user = await getUser(id);
+    if (userInfo._id !== id && !userInfo.isAdmin) {
+      return res
+        .status(403)
+        .send("Access Denied: You can only access your own user data");
+    }
     res.status(200).send(user);
   } catch (error) {
     res.status(400).send(error.message);
@@ -31,7 +38,13 @@ router.get("/:id", async (req, res) => {
 });
 
 // Get All Users
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
+  let userInfo = req.user;
+  if (!userInfo.isAdmin) {
+    return res
+      .status(403)
+      .send("Access Denied: Admins Only Allowed To Get All Users List");
+  }
   try {
     let users = await getAllUsers();
     res.status(200).send(users);
@@ -39,6 +52,7 @@ router.get("/", async (req, res) => {
     res.status(500).send(error.message);
   }
 });
+
 // Delete User
 router.delete("/:id", async (req, res) => {
   try {
