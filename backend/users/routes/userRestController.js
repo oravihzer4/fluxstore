@@ -69,7 +69,7 @@ router.post("/login", async (req, res) => {
   try {
     let { email, password } = req.body;
     const token = await loginUser(email, password);
-    res.send(token).status(200);
+    res.status(200).send({ token });
   } catch (error) {
     res.status(400).send(error.message);
   }

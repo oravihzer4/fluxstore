@@ -1,20 +1,41 @@
-import { useMemo, useState, type FunctionComponent } from "react";
+import { useEffect, useMemo, useState, type FunctionComponent } from "react";
 import { successMassage } from "../Services/FeedbackService";
 import { useCart } from "../Context/CartContext";
-import { productsData, type Product } from "../../utils/productsData";
 
 const DEFAULT_IMAGE =
   "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg";
 
-const Products: FunctionComponent = () => {
-  const initialProducts: Product[] = productsData;
+type Product = {
+  _id: string;
+  title: string;
+  description: string;
+  price: string;
+  image?: string;
+};
 
-  const [products, setProducts] = useState(initialProducts);
+const Products: FunctionComponent = () => {
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
 
   const { addItem } = useCart();
-
   const isLoggedIn = Boolean(localStorage.getItem("x-auth-token"));
+
+  useEffect(() => {
+    console.log(import.meta.env.VITE_API_BASE);
+
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}products`);
+        if (!res.ok) throw new Error("Failed to fetch products");
+        const data = await res.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error ", error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const handleSort = (direction: "asc" | "desc") => {
     const sorted = [...products].sort((a, b) => {
@@ -60,18 +81,14 @@ const Products: FunctionComponent = () => {
 
       <div className="row">
         {filteredProducts.map((product) => (
-          <div className="col-md-3 mb-4" key={product.id}>
+          <div className="col-md-3 mb-4" key={product._id}>
             <div className="card h-100 shadow-sm">
               <img
-                src={product.image?.trim() ? product.image : DEFAULT_IMAGE}
+                src={
+                  "https://img.freepik.com/free-vector/illustration-gallery-icon_53876-27002.jpg"
+                }
                 alt={product.title}
                 style={{ height: "300px", objectFit: "cover" }}
-                onError={(e) => {
-                  const target = e.currentTarget as HTMLImageElement;
-                  if (target.src !== DEFAULT_IMAGE) {
-                    target.src = DEFAULT_IMAGE;
-                  }
-                }}
               />
               <div className="card-body">
                 <h5>{product.title}</h5>
@@ -82,11 +99,6 @@ const Products: FunctionComponent = () => {
                     <button
                       className="btn btn-sm btn-outline-dark"
                       onClick={() => {
-                        addItem({
-                          ...product,
-                          image: product.image || DEFAULT_IMAGE,
-                          quantity: 1,
-                        });
                         successMassage(`${product.title} added to cart!`);
                       }}
                     >

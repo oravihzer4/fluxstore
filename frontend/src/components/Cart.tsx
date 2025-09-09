@@ -24,16 +24,14 @@ const Cart = () => {
       <div className="container my-4">
         <h2 className="mb-4 text-center">Your Cart</h2>
         {items.length === 0 ? (
-          <p className="text-center text-muted">
-            <p>
-              Your cart is empty. Add some amazing gaming gear to get started!
-            </p>
+          <section className="text-center text-muted">
+            Your cart is empty. Add some amazing gaming gear to get started!
             <br />
             <br />
             <Link to="/" className="text-dark">
               <h4>Continue Shopping</h4>
             </Link>
-          </p>
+          </section>
         ) : (
           <>
             <div className="list-group mb-3">

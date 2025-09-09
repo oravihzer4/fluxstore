@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik, type FormikValues } from "formik";
 import { successMassage } from "../Services/FeedbackService";
+import { loginUser } from "../Services/userService";
+import { errorMassage } from "../Services/FeedbackService";
 
 interface LoginProps {}
 
@@ -21,14 +23,25 @@ const Login: FunctionComponent<LoginProps> = () => {
         .trim()
         .matches(/^(?=.*[!@#$%^&*(),.?":{}|<>]).*$/),
     }),
-    onSubmit: (values, { resetForm }) => {
-      console.log(values);
-      localStorage.setItem("x-auth-token", "dummy-token");
-      successMassage("Login successful! Welcome back.");
-      resetForm();
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 200);
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const response = await loginUser({
+          email: values.email,
+          password: values.password,
+        });
+        const token = response.data.token;
+        localStorage.setItem("x-auth-token", token);
+        successMassage("Login successful! Welcome back.");
+        resetForm();
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 200);
+      } catch (error: any) {
+        errorMassage(
+          error?.response?.data ||
+            "Login failed. Please check your credentials."
+        );
+      }
     },
   });
 

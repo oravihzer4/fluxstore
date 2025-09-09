@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik, type FormikValues } from "formik";
 import { successMassage } from "../Services/FeedbackService";
+import { registerUser } from "../Services/userService";
+import { errorMassage } from "../Services/FeedbackService";
 
 interface RegisterProps {}
 
@@ -53,11 +55,38 @@ const Register: FunctionComponent<RegisterProps> = () => {
         .required("Confirm Password is required"),
       imageUrl: yup.string().url("Invalid URL format").optional(),
     }),
-    onSubmit: (values, { resetForm }) => {
-      console.log(values);
-      resetForm();
-      navigate("/login");
-      successMassage("Registration successful! You can now log in.");
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const userToRegister = {
+          name: {
+            first: values.firstName,
+            middle: values.middleName,
+            last: values.lastName,
+          },
+          email: values.email,
+          phone: values.phone,
+          address: {
+            street: values.address.street,
+            houseNumber: Number(values.address.houseNumber),
+            city: values.address.city,
+            state: values.address.state,
+            country: values.address.country,
+            zip: Number(values.address.zipCode),
+          },
+          password: values.password,
+          image: { url: values.imageUrl },
+          pushNot: values.pushNot,
+        };
+        await registerUser(userToRegister);
+        resetForm();
+        successMassage("Registration successful! You can now log in.");
+        navigate("/login");
+      } catch (error: any) {
+        errorMassage(
+          error?.response?.data ||
+            "Registration failed. Please check your details."
+        );
+      }
     },
   });
 
