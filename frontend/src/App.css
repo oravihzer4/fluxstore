@@ -8,7 +8,6 @@
 }
 
 h1 {
-  color: black;
   transition: 0.2s ease-in-out;
 }
 h1:hover {
@@ -28,7 +27,6 @@ img:hover {
 }
 
 body {
-  background-color: white;
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -62,8 +60,4 @@ body {
   50% {
     transform: translateY(-30px);
   }
-}
-
-.animated-btn {
-  animation: float 2s ease-in-out infinite;
 }

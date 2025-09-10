@@ -8,7 +8,7 @@ const About: FunctionComponent = () => {
         <div className="row text-center text-md-start">
           <div className="col-md-4 mb-4">
             <h4 className="fw-bold text-dark ">flux.</h4>
-            <p className="text-muted">
+            <p>
               Next-generation gaming accessories for the modern gamer. Elevate
               your setup with cutting-edge technology.
             </p>
@@ -87,7 +87,7 @@ const About: FunctionComponent = () => {
 
         <hr className="border-secondary" />
 
-        <div className="text-center text-muted">
+        <div className="text-center ">
           © {new Date().getFullYear()} flux. All Rights Reserved.
         </div>
       </div>

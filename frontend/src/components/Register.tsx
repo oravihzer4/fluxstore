@@ -311,7 +311,7 @@ const Register: FunctionComponent<RegisterProps> = () => {
 
         {/* Submit */}
         <button type="submit" className="btn btn-primary">
-          Register
+          done.
         </button>
 
         <br />

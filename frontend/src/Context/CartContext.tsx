@@ -2,7 +2,7 @@ import { createContext, useContext, useReducer, useEffect } from "react";
 import type { ReactNode } from "react";
 
 export interface CartItem {
-  id: number;
+  id: string;
   title: string;
   price: number; // 🟢 price as number instead of string
   image: string;
@@ -15,8 +15,8 @@ interface CartState {
 
 type CartAction =
   | { type: "ADD_ITEM"; payload: CartItem }
-  | { type: "REMOVE_ITEM"; payload: number }
-  | { type: "UPDATE_QTY"; payload: { id: number; delta: number } }
+  | { type: "REMOVE_ITEM"; payload: string }
+  | { type: "UPDATE_QTY"; payload: { id: string; delta: number } }
   | { type: "CLEAR_CART" };
 
 const CartContext = createContext<{
@@ -24,8 +24,8 @@ const CartContext = createContext<{
   addItem: (
     item: CartItem | (Omit<CartItem, "price"> & { price: string })
   ) => void;
-  removeItem: (id: number) => void;
-  updateQty: (id: number, delta: number) => void;
+  removeItem: (id: string) => void;
+  updateQty: (id: string, delta: number) => void;
   clearCart: () => void;
   cartTotal: number;
   cartCount: number;
@@ -108,9 +108,9 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     dispatch({ type: "ADD_ITEM", payload: item });
   };
 
-  const removeItem = (id: number) =>
+  const removeItem = (id: string) =>
     dispatch({ type: "REMOVE_ITEM", payload: id });
-  const updateQty = (id: number, delta: number) =>
+  const updateQty = (id: string, delta: number) =>
     dispatch({ type: "UPDATE_QTY", payload: { id, delta } });
   const clearCart = () => dispatch({ type: "CLEAR_CART" });
 

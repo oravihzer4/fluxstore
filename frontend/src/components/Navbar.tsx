@@ -1,28 +1,49 @@
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { Link } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { ThemeContext } from "../App";
 
 const FluxNavbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("user");
+  const [isAdmin, setIsAdmin] = useState(false);
+  const { darkMode, setDarkMode } = useContext(ThemeContext);
 
   useEffect(() => {
     const token = localStorage.getItem("x-auth-token");
     if (token) {
       setIsLoggedIn(true);
-      const storedName = localStorage.getItem("user-name");
-      setUserName(storedName ?? "user");
+      // Fetch user info from /users/me
+      import("axios").then((axios) => {
+        axios.default
+          .get(`${import.meta.env.VITE_API_BASE}users/me`, {
+            headers: { "x-auth-token": token },
+          })
+          .then((res) => {
+            const firstName = res.data?.name?.first || "user";
+            setUserName(firstName);
+            setIsAdmin(!!res.data?.isAdmin);
+            localStorage.setItem("user-name", firstName);
+          })
+          .catch(() => {
+            setUserName("user");
+            setIsAdmin(false);
+          });
+      });
     } else {
       setIsLoggedIn(false);
+      setIsAdmin(false);
     }
   }, []);
 
   return (
     <Navbar
       expand="lg"
-      bg="light"
-      variant="light"
-      className="px-3 position-sticky top-0 shadow-sm"
+      bg={darkMode ? "dark" : "light"}
+      variant={darkMode ? "dark" : "light"}
+      className={`px-3 position-sticky top-0 shadow-sm ${
+        darkMode ? "navbar-dark bg-dark" : "navbar-light bg-light"
+      }`}
       style={{ zIndex: 1030 }}
     >
       <Container fluid>
@@ -34,9 +55,16 @@ const FluxNavbar = () => {
           <i className="fa-brands fa-slack fa-spin m-1 opacity-75 "></i>
           <span> flux.</span>
         </Navbar.Brand>
-
+        {isAdmin && (
+          <Link
+            to="/adminDashboard"
+            className="btn btn-light btn-sm text-danger"
+          >
+            Admin Dashboard
+          </Link>
+        )}
         <Navbar.Toggle aria-controls="navbar-nav" />
-        <Navbar.Collapse id="navbar-nav" className="justify-content-center">
+        <Navbar.Collapse id="navbar-nav " className="justify-content-center">
           <Nav className="text-center gap-2 mx-auto">
             <Nav.Link as={Link} to="/cart">
               Cart
@@ -61,7 +89,27 @@ const FluxNavbar = () => {
             )}
           </Nav>
         </Navbar.Collapse>
-        <div className="d-flex align-items-center gap-2">
+        <div className="d-flex align-items-center gap-3">
+          <button
+            className={`btn btn-sm bg-light rounded-circle shadow-sm ${
+              darkMode ? "btn-light" : "btn-dark"
+            }`}
+            title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+            onClick={() => setDarkMode(!darkMode)}
+            style={{
+              width: 38,
+              height: 38,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <i
+              className={`fa-solid ${
+                darkMode ? "fa-sun " : "fa-moon text-dark"
+              }`}
+            ></i>
+          </button>
           {isLoggedIn && (
             <Link
               to="/myprofile"
@@ -76,5 +124,8 @@ const FluxNavbar = () => {
     </Navbar>
   );
 };
+
+// Add global dark mode styles
+// TODO: Move global dark mode useEffect to App.tsx or a top-level component for proper application-wide effect.
 
 export default FluxNavbar;

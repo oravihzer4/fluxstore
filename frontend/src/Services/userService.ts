@@ -17,7 +17,7 @@ export function loginUser(user: any) {
 export function getUserById(id: string) {
   return axios.get(`${API}/${id}`, {
     headers: {
-      "x-auth-token": sessionStorage.getItem("token"),
+      "x-auth-token": localStorage.getItem("x-auth-token"),
     },
   });
 }

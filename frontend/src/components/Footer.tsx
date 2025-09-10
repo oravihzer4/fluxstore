@@ -30,7 +30,7 @@ const Footer: FunctionComponent<FooterProps> = () => {
         >
           <div className="d-flex flex-column">
             <span className="fw-semibold text-dark">Not our friend yet?</span>
-            <small className="text-muted">
+            <small className="">
               No account, no loot — sign up and start collecting the best
             </small>
           </div>
@@ -46,11 +46,12 @@ const Footer: FunctionComponent<FooterProps> = () => {
       <footer className="bg-body-tertiary text-center fixed-bottom d-flex justify-content-around p-2">
         <div className="container d-flex justify-content-around gap-4">
           <Link to="/" className="text-dark text-decoration-none fw-medium">
+            <i className="fa-solid fa-house p-1"></i>
             Home
           </Link>
           <Link to="/cart" className="text-dark text-decoration-none fw-medium">
-            Cart
             <i className="fa-solid fa-cart-shopping p-1"></i>
+            Cart
           </Link>
         </div>
       </footer>

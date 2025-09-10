@@ -3,64 +3,78 @@ import { FaDiscord, FaGithub, FaEnvelope, FaPhone } from "react-icons/fa";
 
 const Contact: FunctionComponent = () => {
   return (
-    <div className="container p-5">
+    <div className="container py-5">
       <div className="row justify-content-center mb-4">
-        <div className="col-md-8 text-center">
-          <h1>Contact Us</h1>
-          <p className="lead text-muted ">
-            Let’s connect! Reach out anytime for support, collaboration, or
-            community engagement.
-          </p>
+        <div className="col-lg-8 text-center">
+          <div className="d-flex flex-column align-items-center mb-3">
+            <div
+              className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mb-3"
+              style={{ width: 70, height: 70 }}
+            >
+              <i className="fa-solid fa-envelope-open-text fa-2x"></i>
+            </div>
+            <h2 className="fw-bold mb-1">Contact Us</h2>
+            <p className="lead mb-0">
+              We're here to help! Reach out for support, feedback, or
+              partnership opportunities.
+            </p>
+          </div>
         </div>
       </div>
-
       <div className="row justify-content-center">
-        <div className="col-md-6">
-          <div className="mb-4 d-flex align-items-center">
-            <FaDiscord className="me-3 text-primary fs-4" />
-            <a
-              href="https://discord.gg/yourserver"
-              target="_blank"
-              rel="noreferrer"
-              className="fs-5 text-decoration-none text-dark"
-            >
-              Join our Discord Community
-            </a>
+        <div className="col-md-7">
+          <div className="card shadow-lg border-0 rounded-4 p-4 bg-light">
+            <div className="mb-4 d-flex align-items-center gap-3">
+              <FaDiscord className="text-primary fs-2" />
+              <a
+                href="https://discord.gg/yourserver"
+                target="_blank"
+                rel="noreferrer"
+                className="fs-5 text-decoration-none text-dark fw-semibold"
+              >
+                Discord Community
+              </a>
+            </div>
+            <div className="mb-4 d-flex align-items-center gap-3">
+              <FaGithub className="text-dark fs-2" />
+              <a
+                href="https://github.com/yourusername"
+                target="_blank"
+                rel="noreferrer"
+                className="fs-5 text-decoration-none text-dark fw-semibold"
+              >
+                GitHub Profile
+              </a>
+            </div>
+            <div className="mb-4 d-flex align-items-center gap-3">
+              <FaEnvelope className="text-danger fs-2" />
+              <a
+                href="mailto:your@email.com"
+                className="fs-5 text-decoration-none text-dark fw-semibold"
+              >
+                Email Us
+              </a>
+            </div>
+            <div className="mb-4 d-flex align-items-center gap-3">
+              <FaPhone className="text-success fs-2" />
+              <span className="fs-5 fw-semibold">+972-54-123-4567</span>
+            </div>
+            <div className="text-center mt-4">
+              <p className="small">
+                We respond within 24 hours. For business inquiries, please use
+                email.
+              </p>
+            </div>
           </div>
-
-          <div className="mb-4 d-flex align-items-center">
-            <FaGithub className="me-3 text-dark fs-4" />
-            <a
-              href="https://github.com/yourusername"
-              target="_blank"
-              rel="noreferrer"
-              className="fs-5 text-decoration-none text-dark"
-            >
-              GitHub Profile
-            </a>
-          </div>
-
-          <div className="mb-4 d-flex align-items-center">
-            <FaEnvelope className="me-3 text-danger fs-4" />
-            <a
-              href="mailto:your@email.com"
-              className="fs-5 text-decoration-none text-dark"
-            >
-              Email Us
-            </a>
-          </div>
-
-          <div className="mb-4 d-flex align-items-center">
-            <FaPhone className="me-3 text-success fs-4" />
-            <span className="fs-5">+972-54-123-4567</span>
-          </div>
-
-          <p className="text-muted small mt-5">
-            We usually respond within 24 hours. For business inquiries, please
-            use email.
-          </p>
         </div>
       </div>
+      <style>{`
+        .card:hover {
+          box-shadow: 0 0 0.75rem 0.1rem #0d6efd33;
+          transform: translateY(-2px) scale(1.02);
+          transition: all 0.2s;
+        }
+      `}</style>
     </div>
   );
 };

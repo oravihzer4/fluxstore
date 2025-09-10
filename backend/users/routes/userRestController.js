@@ -19,7 +19,15 @@ router.post("/", async (req, res) => {
     res.status(400).send(error.message);
   }
 });
-
+// Get current logged-in user
+router.get("/me", auth, async (req, res) => {
+  try {
+    const user = await getUser(req.user._id);
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
 // Get User by ID
 router.get("/:id", auth, async (req, res) => {
   try {
