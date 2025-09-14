@@ -52,7 +52,7 @@ const FluxNavbar = () => {
           to="/"
           className="d-flex align-items-center gap-1"
         >
-          <i className="fa-brands fa-slack fa-spin m-1 opacity-75 "></i>
+          <i className="fa-solid fa-ghost fa-bounce m-1 opacity-75 "></i>
           <span> flux.</span>
         </Navbar.Brand>
         {isAdmin && (

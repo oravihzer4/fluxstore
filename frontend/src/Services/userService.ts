@@ -21,3 +21,12 @@ export function getUserById(id: string) {
     },
   });
 }
+
+// get all users (admin only)
+export function getAllUsers() {
+  return axios.get(`${API}users`, {
+    headers: {
+      "x-auth-token": localStorage.getItem("x-auth-token"),
+    },
+  });
+}

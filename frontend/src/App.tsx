@@ -6,6 +6,9 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import Navbar from "./components/Navbar";
+import AdminProducts from "./components/adminManage/adminProducts";
+import AdminUsers from "./components/adminManage/adminUsers";
+import AdminOrders from "./components/adminManage/adminOrders";
 import { createContext, useState, useEffect } from "react";
 import Footer from "./components/Footer";
 import Contact from "./components/Contact";
@@ -69,8 +72,31 @@ function AppContent() {
             </FadePage>
           }
         />
-        <Route path="/adminDashboard" element={<AdminDashboard />} /> // Add
-        route for AdminDashboard
+        <Route path="/adminDashboard" element={<AdminDashboard />} />
+        <Route
+          path="/adminManage/adminProducts"
+          element={
+            <FadePage>
+              <AdminProducts />
+            </FadePage>
+          }
+        />
+        <Route
+          path="/adminManage/adminUsers"
+          element={
+            <FadePage>
+              <AdminUsers />
+            </FadePage>
+          }
+        />
+        <Route
+          path="/adminManage/adminOrders"
+          element={
+            <FadePage>
+              <AdminOrders />
+            </FadePage>
+          }
+        />
         <Route
           path="/login"
           element={

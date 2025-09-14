@@ -6,10 +6,10 @@ const AdminDashboard: FunctionComponent = () => {
     <div className="container py-5">
       <div className="row justify-content-center">
         <div className="col-lg-8">
-          <div className="card shadow-lg border-0 rounded-4 p-4 bg-light">
+          <div className="card shadow-lg border-0 rounded-2 p-4 bg-light">
             <div className="d-flex align-items-center mb-4 gap-3">
               <div
-                className="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
+                className="bg-danger text-white rounded-circle d-flex align-items-center justify-content-center"
                 style={{ width: 70, height: 70 }}
               >
                 <i className="fa-solid fa-crown fa-2x"></i>

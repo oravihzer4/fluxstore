@@ -23,7 +23,7 @@ const Contact: FunctionComponent = () => {
       </div>
       <div className="row justify-content-center">
         <div className="col-md-7">
-          <div className="card shadow-lg border-0 rounded-4 p-4 bg-light">
+          <div className="card shadow-lg border-0 rounded-2 p-4 bg-light">
             <div className="mb-4 d-flex align-items-center gap-3">
               <FaDiscord className="text-primary fs-2" />
               <a

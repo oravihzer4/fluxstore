@@ -48,14 +48,14 @@ const Cart = () => {
           <div className="row g-4 mb-4">
             {items.map((item) => (
               <div className="col-md-6 col-lg-4" key={item.id}>
-                <div className="card h-100 border-0 shadow-lg cart-card-hover rounded-4">
+                <div className="card h-100 border-0 shadow-lg cart-card-hover rounded-2">
                   <img
                     src={
                       typeof (item.image as any) === "object"
                         ? (item.image as any)?.url || DEFAULT_IMAGE
                         : item.image || DEFAULT_IMAGE
                     }
-                    className="card-img-top rounded-4"
+                    className="card-img-top rounded-2"
                     alt={
                       typeof (item.image as any) === "object"
                         ? (item.image as any)?.alt || item.title

@@ -5,6 +5,7 @@ import React, {
   type FunctionComponent,
 } from "react";
 import { successMassage } from "../Services/FeedbackService";
+import { createProduct } from "../Services/productsService";
 import { useCart } from "../Context/CartContext";
 
 const DEFAULT_IMAGE =
@@ -15,11 +16,57 @@ type Product = {
   title: string;
   description: string;
   price: string;
+  category: string;
   image?: string;
 };
 
 const Products: FunctionComponent = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addForm, setAddForm] = useState<Partial<Product>>({
+    title: "",
+    description: "",
+    price: "",
+    category: "",
+  });
+  const [addLoading, setAddLoading] = useState(false);
+  const [addError, setAddError] = useState<string | null>(null);
+  const openAddModal = () => {
+    setAddForm({ title: "", description: "", price: "", category: "" });
+    setAddError(null);
+    setShowAddModal(true);
+  };
+
+  const closeAddModal = () => {
+    setShowAddModal(false);
+    setAddError(null);
+  };
+
+  const handleAddChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setAddForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleAddSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAddLoading(true);
+    setAddError(null);
+    try {
+      await createProduct(addForm);
+      closeAddModal();
+      // Refresh products
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}products`);
+      const data = await res.json();
+      setProducts(data);
+      successMassage("Product added successfully!");
+    } catch (err: any) {
+      setAddError(err.response?.data || "Failed to add product");
+    } finally {
+      setAddLoading(false);
+    }
+  };
   const [searchTerm, setSearchTerm] = useState("");
 
   const { addItem } = useCart();
@@ -96,7 +143,7 @@ const Products: FunctionComponent = () => {
               <img
                 src="https://cdn.wccftech.com/wp-content/uploads/2023/11/WCCFps5blackfriday2023.jpg"
                 alt="Advertisement"
-                className="rounded-4 shadow-lg w-100"
+                className="rounded-2 shadow-lg w-100"
                 style={{ height: "220px", objectFit: "cover" }}
               />
             </div>
@@ -106,9 +153,101 @@ const Products: FunctionComponent = () => {
               add to your cart!
             </p>
             {isAdmin && (
-              <button className="btn btn-primary mt-3 px-4 py-2 fw-bold shadow-sm">
+              <button
+                className="btn btn-primary mt-3 px-4 py-2 fw-bold shadow-sm"
+                onClick={openAddModal}
+              >
                 <i className="fa-solid fa-plus me-2"></i> Add Product
               </button>
+            )}
+            {/* Add Product Modal */}
+            {showAddModal && (
+              <div
+                className="modal show d-block"
+                tabIndex={-1}
+                style={{ background: "#0008" }}
+              >
+                <div className="modal-dialog">
+                  <div className="modal-content">
+                    <form onSubmit={handleAddSubmit}>
+                      <div className="modal-header">
+                        <h5 className="modal-title">Add Product</h5>
+                        <button
+                          type="button"
+                          className="btn-close"
+                          onClick={closeAddModal}
+                        ></button>
+                      </div>
+                      <div className="modal-body">
+                        {addError && (
+                          <div className="alert alert-danger">{addError}</div>
+                        )}
+                        <div className="mb-3">
+                          <label className="form-label">Title</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="title"
+                            value={addForm.title || ""}
+                            onChange={handleAddChange}
+                            required
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label className="form-label">Category</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="category"
+                            value={addForm.category || ""}
+                            onChange={handleAddChange}
+                            required
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label className="form-label">Description</label>
+                          <textarea
+                            className="form-control"
+                            name="description"
+                            value={addForm.description || ""}
+                            onChange={handleAddChange}
+                            required
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label className="form-label">Price</label>
+                          <input
+                            type="number"
+                            className="form-control"
+                            name="price"
+                            value={addForm.price || ""}
+                            onChange={handleAddChange}
+                            required
+                          />
+                        </div>
+                        {/* Image input removed as requested */}
+                      </div>
+                      <div className="modal-footer">
+                        <button
+                          type="button"
+                          className="btn btn-secondary"
+                          onClick={closeAddModal}
+                          disabled={addLoading}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          className="btn btn-success"
+                          disabled={addLoading}
+                        >
+                          {addLoading ? "Adding..." : "Add Product"}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
@@ -149,7 +288,7 @@ const Products: FunctionComponent = () => {
                     <img
                       src="https://gamicsoft.sgp1.digitaloceanspaces.com/37213/ps.jpg"
                       alt="Advertisement"
-                      className="rounded-4 shadow-lg w-100"
+                      className="rounded-2 shadow-lg w-100"
                       style={{ height: "220px", objectFit: "cover" }}
                     />
                   </div>
@@ -158,7 +297,7 @@ const Products: FunctionComponent = () => {
             }
             items.push(
               <div className="col-md-4" key={product._id}>
-                <div className="card h-100 border-0 shadow-lg product-card-hover rounded-4">
+                <div className="card h-100 border-0 shadow-lg product-card-hover rounded-2">
                   <img
                     src={
                       typeof (product.image as any) === "object"
@@ -170,7 +309,7 @@ const Products: FunctionComponent = () => {
                         ? (product.image as any)?.alt || product.title
                         : product.title
                     }
-                    className="card-img-top rounded-4"
+                    className="card-img-top rounded-2"
                     style={{ height: "220px", objectFit: "cover" }}
                   />
                   <div className="card-body d-flex flex-column justify-content-between">

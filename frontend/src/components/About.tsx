@@ -3,11 +3,11 @@ import { Link } from "react-router-dom";
 
 const About: FunctionComponent = () => {
   return (
-    <footer className="bg-light text-light pt-5 pb-4 mt-5 ">
+    <footer className=" pt-5 pb-4 mt-5 ">
       <div className="container m">
         <div className="row text-center text-md-start">
           <div className="col-md-4 mb-4">
-            <h4 className="fw-bold text-dark ">flux.</h4>
+            <h4 className="fw-bold">flux.</h4>
             <p>
               Next-generation gaming accessories for the modern gamer. Elevate
               your setup with cutting-edge technology.
@@ -18,22 +18,22 @@ const About: FunctionComponent = () => {
             <h5 className="fw-bold mb-3">Shop</h5>
             <ul className="list-unstyled">
               <li>
-                <Link to="/" className="text-dark text-decoration-none">
+                <Link to="/" className="text-decoration-none">
                   Keyboards
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-dark text-decoration-none">
+                <Link to="/" className="text-decoration-none">
                   Gaming Mice
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-dark text-decoration-none">
+                <Link to="/" className="text-decoration-none">
                   Headsets
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-dark text-decoration-none">
+                <Link to="/" className="text-decoration-none">
                   Components
                 </Link>
               </li>
@@ -44,22 +44,22 @@ const About: FunctionComponent = () => {
             <h5 className="fw-bold mb-3">Support</h5>
             <ul className="list-unstyled">
               <li>
-                <Link to="/contact" className="text-dark text-decoration-none">
+                <Link to="/contact" className="text-decoration-none">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-dark text-decoration-none">
+                <Link to="/" className="text-decoration-none">
                   Shipping Info
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-dark text-decoration-none">
+                <Link to="/" className="text-decoration-none">
                   Returns
                 </Link>
               </li>
               <li>
-                <Link to="/" className="text-dark text-decoration-none">
+                <Link to="/" className="text-decoration-none">
                   Warranty
                 </Link>
               </li>
@@ -69,16 +69,16 @@ const About: FunctionComponent = () => {
           <div className="col-md-4 mb-4">
             <h5 className="fw-bold mb-3">Connect</h5>
             <div className="d-flex gap-3 justify-content-center justify-content-md-start">
-              <a href="#" className="text-dark fs-5" aria-label="Discord">
+              <a href="#" className="fs-5" aria-label="Discord">
                 <i className="fab fa-discord"></i>
               </a>
-              <a href="#" className="text-dark fs-5" aria-label="Twitter">
+              <a href="#" className="fs-5" aria-label="Twitter">
                 <i className="fab fa-twitter"></i>
               </a>
-              <a href="#" className="text-dark fs-5" aria-label="Instagram">
+              <a href="#" className="fs-5" aria-label="Instagram">
                 <i className="fab fa-instagram"></i>
               </a>
-              <a href="#" className="text-dark fs-5" aria-label="YouTube">
+              <a href="#" className="fs-5" aria-label="YouTube">
                 <i className="fab fa-youtube"></i>
               </a>
             </div>

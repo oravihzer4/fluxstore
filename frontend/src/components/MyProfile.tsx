@@ -87,7 +87,7 @@ const MyProfile: FunctionComponent<MyProfileProps> = () => {
     <div className="container py-5">
       <div className="row justify-content-center">
         <div className="col-lg-8">
-          <div className="card shadow-lg border-0 rounded-4 p-4 bg-light">
+          <div className="card shadow-lg border-0 rounded-2 p-4 bg-light">
             <div className="d-flex align-items-center mb-4 gap-3">
               <img
                 src={user.imageUrl}
