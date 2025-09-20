@@ -5,7 +5,21 @@ import React, {
   type FunctionComponent,
 } from "react";
 import { successMassage } from "../Services/FeedbackService";
-import { createProduct } from "../Services/productsService";
+import { createProduct, deleteProduct } from "../Services/productsService";
+// Delete product handler
+const handleDeleteProduct = async (id: string) => {
+  if (!window.confirm("Are you sure you want to delete this product?")) return;
+  try {
+    await deleteProduct(id);
+    // Refresh products
+    const res = await fetch(`${import.meta.env.VITE_API_BASE}products`);
+    const data = await res.json();
+    setProducts(data);
+    successMassage("Product deleted successfully!");
+  } catch (err: any) {
+    successMassage("Failed to delete product");
+  }
+};
 import { useCart } from "../Context/CartContext";
 
 const DEFAULT_IMAGE =
@@ -28,7 +42,9 @@ const Products: FunctionComponent = () => {
     description: "",
     price: "",
     category: "",
+    image: "",
   });
+  const [addImageAlt, setAddImageAlt] = useState<string>("");
   const [addLoading, setAddLoading] = useState(false);
   const [addError, setAddError] = useState<string | null>(null);
   const openAddModal = () => {
@@ -46,7 +62,11 @@ const Products: FunctionComponent = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
-    setAddForm((prev) => ({ ...prev, [name]: value }));
+    if (name === "alt") {
+      setAddImageAlt(value);
+    } else {
+      setAddForm((prev) => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleAddSubmit = async (e: React.FormEvent) => {
@@ -54,7 +74,15 @@ const Products: FunctionComponent = () => {
     setAddLoading(true);
     setAddError(null);
     try {
-      await createProduct(addForm);
+      // Send image as object
+      const productToSend = {
+        ...addForm,
+        image: {
+          url: addForm.image || "",
+          alt: addImageAlt || "",
+        },
+      };
+      await createProduct(productToSend);
       closeAddModal();
       // Refresh products
       const res = await fetch(`${import.meta.env.VITE_API_BASE}products`);
@@ -124,6 +152,88 @@ const Products: FunctionComponent = () => {
     setProducts(sorted);
   };
 
+  // Edit product modal state
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editForm, setEditForm] = useState<Partial<Product>>({});
+  const [editLoading, setEditLoading] = useState(false);
+  const [editError, setEditError] = useState<string | null>(null);
+  const [editProductId, setEditProductId] = useState<string | null>(null);
+
+  const openEditModal = (product: Product) => {
+    setEditProductId(product._id || "");
+    setEditForm({ ...product });
+    setEditError(null);
+    setShowEditModal(true);
+  };
+
+  const closeEditModal = () => {
+    setShowEditModal(false);
+    setEditError(null);
+    setEditProductId(null);
+    setEditForm({});
+  };
+
+  const handleEditChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    if (name === "image") {
+      setEditForm((prev) => ({
+        ...prev,
+        image:
+          typeof prev.image === "object" && prev.image !== null
+            ? { ...prev.image, url: value }
+            : { url: value, alt: "" },
+      }));
+    } else if (name === "alt") {
+      setEditForm((prev) => ({
+        ...prev,
+        image:
+          typeof prev.image === "object" && prev.image !== null
+            ? { ...prev.image, alt: value }
+            : {
+                url: typeof prev.image === "string" ? prev.image : "",
+                alt: value,
+              },
+      }));
+    } else {
+      setEditForm((prev) => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleEditSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editProductId) return;
+    setEditLoading(true);
+    setEditError(null);
+    try {
+      // Always send image as object
+      const formToSend = {
+        ...editForm,
+        image:
+          typeof editForm.image === "object" && editForm.image !== null
+            ? editForm.image
+            : {
+                url: typeof editForm.image === "string" ? editForm.image : "",
+                alt: "",
+              },
+      };
+      await import("../Services/productsService").then(({ updateProduct }) =>
+        updateProduct(editProductId, formToSend)
+      );
+      closeEditModal();
+      // Refresh products
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}products`);
+      const data = await res.json();
+      setProducts(data);
+      successMassage("Product updated successfully!");
+    } catch (err: any) {
+      setEditError(err.response?.data || "Failed to update product");
+    } finally {
+      setEditLoading(false);
+    }
+  };
+
   const filteredProducts = useMemo(() => {
     const term = searchTerm.trim().toLowerCase();
     if (!term) return products;
@@ -140,11 +250,14 @@ const Products: FunctionComponent = () => {
         <div className="col-12">
           <div className="d-flex flex-column align-items-center mb-3">
             <div className="w-100 px-0 mb-3">
-              <img
-                src="https://cdn.wccftech.com/wp-content/uploads/2023/11/WCCFps5blackfriday2023.jpg"
-                alt="Advertisement"
+              <video
+                src="https://www.w3schools.com/html/mov_bbb.mp4"
                 className="rounded-2 shadow-lg w-100"
                 style={{ height: "220px", objectFit: "cover" }}
+                autoPlay
+                muted
+                loop
+                playsInline
               />
             </div>
             <h2 className="fw-bold mb-1">Our Products</h2>
@@ -225,7 +338,28 @@ const Products: FunctionComponent = () => {
                             required
                           />
                         </div>
-                        {/* Image input removed as requested */}
+                        <div className="mb-3">
+                          <label className="form-label">Image URL</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="image"
+                            value={addForm.image || ""}
+                            onChange={handleAddChange}
+                            placeholder="https://..."
+                          />
+                        </div>
+                        <div className="mb-3">
+                          <label className="form-label">Image Alt Text</label>
+                          <input
+                            type="text"
+                            className="form-control"
+                            name="alt"
+                            value={addImageAlt}
+                            onChange={handleAddChange}
+                            placeholder="Description for image"
+                          />
+                        </div>
                       </div>
                       <div className="modal-footer">
                         <button
@@ -300,13 +434,23 @@ const Products: FunctionComponent = () => {
                 <div className="card h-100 border-0 shadow-lg product-card-hover rounded-2">
                   <img
                     src={
-                      typeof (product.image as any) === "object"
-                        ? (product.image as any)?.url || DEFAULT_IMAGE
-                        : product.image || DEFAULT_IMAGE
+                      typeof product.image === "object" &&
+                      product.image !== null
+                        ? "url" in product.image &&
+                          typeof product.image.url === "string" &&
+                          product.image.url.trim() !== ""
+                          ? product.image.url
+                          : DEFAULT_IMAGE
+                        : typeof product.image === "string" &&
+                          product.image.trim() !== ""
+                        ? product.image
+                        : DEFAULT_IMAGE
                     }
                     alt={
-                      typeof (product.image as any) === "object"
-                        ? (product.image as any)?.alt || product.title
+                      typeof product.image === "object" &&
+                      product.image !== null &&
+                      "alt" in product.image
+                        ? product.image.alt || product.title
                         : product.title
                     }
                     className="card-img-top rounded-2"
@@ -321,24 +465,46 @@ const Products: FunctionComponent = () => {
                       <span className="fw-bold text-primary fs-5">
                         {product.price} $
                       </span>
-                      {isLoggedIn && (
-                        <button
-                          className="btn btn-outline-success btn-sm px-3"
-                          onClick={() => {
-                            addItem({
-                              id: product._id,
-                              title: product.title,
-                              price: product.price,
-                              image: product.image || DEFAULT_IMAGE,
-                              quantity: 1,
-                            });
-                            successMassage(`${product.title} added to cart!`);
-                          }}
-                        >
-                          <i className="fa-solid fa-cart-plus me-2"></i> Add to
-                          Cart
-                        </button>
-                      )}
+                      <div className="d-flex gap-2">
+                        {isLoggedIn && (
+                          <button
+                            className="btn btn-outline-success btn-sm px-3"
+                            onClick={() => {
+                              addItem({
+                                id: product._id,
+                                title: product.title,
+                                price: product.price,
+                                image: product.image || DEFAULT_IMAGE,
+                                quantity: 1,
+                              });
+                              successMassage(`${product.title} added to cart!`);
+                            }}
+                          >
+                            <i className="fa-solid fa-cart-plus me-2"></i> Add
+                            to Cart
+                          </button>
+                        )}
+                        {isAdmin && (
+                          <div className="d-flex gap-1">
+                            <button
+                              className="btn btn-warning btn-xs py-1 px-2 rounded-1 shadow-sm"
+                              style={{ fontSize: "0.85rem", minWidth: 0 }}
+                              title="Edit Product"
+                              onClick={() => openEditModal(product)}
+                            >
+                              <i className="fa-solid fa-pen-to-square me-1"></i>
+                            </button>
+                            <button
+                              className="btn btn-danger btn-xs py-1 px-2 rounded-1 shadow-sm"
+                              style={{ fontSize: "0.85rem", minWidth: 0 }}
+                              title="Delete Product"
+                              onClick={() => handleDeleteProduct(product._id)}
+                            >
+                              <i className="fa-solid fa-trash"></i>
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -348,11 +514,151 @@ const Products: FunctionComponent = () => {
           return items;
         })()}
       </div>
+      {/* Edit Product Modal */}
+      {showEditModal && (
+        <div
+          className="modal show d-block"
+          tabIndex={-1}
+          style={{ background: "#0008" }}
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <form onSubmit={handleEditSubmit}>
+                <div className="modal-header">
+                  <h5 className="modal-title">Edit Product</h5>
+                  <button
+                    type="button"
+                    className="btn-close"
+                    onClick={closeEditModal}
+                  ></button>
+                </div>
+                <div className="modal-body">
+                  {editError && (
+                    <div className="alert alert-danger">{editError}</div>
+                  )}
+                  <div className="mb-3">
+                    <label className="form-label">Title</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="title"
+                      value={editForm.title || ""}
+                      onChange={handleEditChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Category</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="category"
+                      value={editForm.category || ""}
+                      onChange={handleEditChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Description</label>
+                    <textarea
+                      className="form-control"
+                      name="description"
+                      value={editForm.description || ""}
+                      onChange={handleEditChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Price</label>
+                    <input
+                      type="number"
+                      className="form-control"
+                      name="price"
+                      value={editForm.price || ""}
+                      onChange={handleEditChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Image URL</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="image"
+                      value={
+                        typeof editForm.image === "string"
+                          ? editForm.image
+                          : (editForm.image as any)?.url || ""
+                      }
+                      onChange={handleEditChange}
+                      placeholder="https://..."
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label">Image Alt Text</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="alt"
+                      value={
+                        typeof editForm.image === "object" &&
+                        editForm.image !== null
+                          ? (editForm.image as any)?.alt || ""
+                          : ""
+                      }
+                      onChange={(e) => {
+                        const alt = e.target.value;
+                        setEditForm((prev) => ({
+                          ...prev,
+                          image:
+                            typeof prev.image === "object" &&
+                            prev.image !== null
+                              ? { ...prev.image, alt }
+                              : {
+                                  url:
+                                    typeof prev.image === "string"
+                                      ? prev.image
+                                      : "",
+                                  alt,
+                                },
+                        }));
+                      }}
+                      placeholder="Description for image"
+                    />
+                  </div>
+                </div>
+                <div className="modal-footer">
+                  <button
+                    type="button"
+                    className="btn btn-secondary"
+                    onClick={closeEditModal}
+                    disabled={editLoading}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-success"
+                    disabled={editLoading}
+                  >
+                    {editLoading ? "Saving..." : "Save Changes"}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
       <style>{`
         .product-card-hover:hover {
           box-shadow: 0 0 0.75rem 0.1rem #0d6efd33;
           transform: translateY(-2px) scale(1.03);
           transition: all 0.2s;
+        }
+        .btn-xs {
+          font-size: 0.85rem !important;
+          padding: 0.25rem 0.5rem !important;
+          min-width: 0 !important;
         }
       `}</style>
     </div>

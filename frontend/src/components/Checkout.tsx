@@ -1,15 +1,32 @@
 import type { FunctionComponent } from "react";
 import { useCart } from "../Context/CartContext";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 interface CheckoutProps {}
 
 const Checkout: FunctionComponent<CheckoutProps> = () => {
   const { items, cartTotal, clearCart } = useCart();
 
-  const handlePlaceOrder = () => {
-    alert("Order placed successfully!");
-    clearCart();
+  const handlePlaceOrder = async () => {
+    try {
+      const token = localStorage.getItem("x-auth-token");
+      const orderItems = items.map((item) => ({
+        productId: item.id,
+        title: item.title,
+        price: Number(item.price),
+        quantity: item.quantity,
+      }));
+      await axios.post(
+        `${import.meta.env.VITE_API_BASE}orders`,
+        { items: orderItems },
+        { headers: { "x-auth-token": token || "" } }
+      );
+      alert("Order placed successfully!");
+      clearCart();
+    } catch (err: any) {
+      alert(err.response?.data || "Failed to place order");
+    }
   };
 
   const DEFAULT_IMAGE =

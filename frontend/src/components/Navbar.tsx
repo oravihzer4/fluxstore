@@ -1,4 +1,4 @@
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { ThemeContext } from "../App";
@@ -13,7 +13,6 @@ const FluxNavbar = () => {
     const token = localStorage.getItem("x-auth-token");
     if (token) {
       setIsLoggedIn(true);
-      // Fetch user info from /users/me
       import("axios").then((axios) => {
         axios.default
           .get(`${import.meta.env.VITE_API_BASE}users/me`, {
@@ -111,13 +110,34 @@ const FluxNavbar = () => {
             ></i>
           </button>
           {isLoggedIn && (
-            <Link
-              to="/myprofile"
-              className="text-success text-decoration-none d-flex align-items-center gap-1"
-            >
-              <span>hi, {userName}</span>
-              <i className="fa-solid fa-earth-americas wave p-1"></i>
-            </Link>
+            <Dropdown align="end">
+              <Dropdown.Toggle
+                variant="success"
+                id="profileDropdown"
+                className="d-flex align-items-center gap-1"
+                style={{ minWidth: 100 }}
+              >
+                <span>hi, {userName}</span>
+                <i className="fa-solid fa-earth-americas wave p-1"></i>
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                <Dropdown.Item as={Link} to="/myprofile">
+                  My Profile
+                </Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item
+                  className="text-danger"
+                  onClick={() => {
+                    if (window.confirm("Are you sure you want to log out?")) {
+                      localStorage.removeItem("x-auth-token");
+                      window.location.href = "/";
+                    }
+                  }}
+                >
+                  Logout
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           )}
         </div>
       </Container>

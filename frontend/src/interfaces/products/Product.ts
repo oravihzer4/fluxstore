@@ -4,5 +4,5 @@ export interface Product {
   description: string;
   price: string;
   category: string;
-  image?: string;
+  image?: string | { url: string; alt?: string };
 }

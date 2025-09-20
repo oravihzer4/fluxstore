@@ -25,12 +25,12 @@ const Footer: FunctionComponent<FooterProps> = () => {
     <>
       {showBanner && (
         <div
-          className="position-fixed bottom-0 end-0 mb-5 me-3 bg-body shadow rounded px-4 py-2 d-flex align-items-center justify-content-between gap-3"
+          className="position-fixed bottom-0 end-0 mb-5 me-3 shadow rounded px-4 py-2 d-flex align-items-center justify-content-between gap-3"
           style={{ zIndex: 1050, width: "340px" }}
         >
           <div className="d-flex flex-column">
-            <span className="fw-semibold">Not our friend yet?</span>
-            <small className="">
+            <span>Not our friend yet?</span>
+            <small>
               No account, no loot — sign up and start collecting the best
             </small>
           </div>

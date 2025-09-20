@@ -30,3 +30,34 @@ export function getAllUsers() {
     },
   });
 }
+
+// delete user (admin only)
+export function deleteUser(id: string) {
+  return axios.delete(`${API}users/${id}`, {
+    headers: {
+      "x-auth-token": localStorage.getItem("x-auth-token"),
+    },
+  });
+}
+
+// update user (admin only)
+export function updateUser(id: string, data: Partial<User>) {
+  return axios.put(`${API}users/${id}`, data, {
+    headers: {
+      "x-auth-token": localStorage.getItem("x-auth-token"),
+    },
+  });
+}
+
+// set admin (admin only)
+export function setAdmin(id: string, isAdmin: boolean) {
+  return axios.patch(
+    `${API}users/${id}/admin`,
+    { isAdmin },
+    {
+      headers: {
+        "x-auth-token": localStorage.getItem("x-auth-token"),
+      },
+    }
+  );
+}

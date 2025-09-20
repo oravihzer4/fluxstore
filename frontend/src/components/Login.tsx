@@ -1,4 +1,5 @@
 import type { FunctionComponent } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { useFormik, type FormikValues } from "formik";
@@ -45,6 +46,8 @@ const Login: FunctionComponent<LoginProps> = () => {
     },
   });
 
+  const [showPassword, setShowPassword] = useState(false);
+
   return (
     <div className="container">
       <form
@@ -76,20 +79,38 @@ const Login: FunctionComponent<LoginProps> = () => {
           <label htmlFor="password" className="form-label">
             Password
           </label>
-          <input
-            type="password"
-            className="form-control"
-            id="password"
-            name="password"
-            autoComplete="off"
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            onBlur={formik.handleBlur}
-            required
-          />
+          <div className="input-group">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="form-control"
+              id="password"
+              name="password"
+              autoComplete="off"
+              onChange={formik.handleChange}
+              value={formik.values.password}
+              onBlur={formik.handleBlur}
+              required
+            />
+            <button
+              type="button"
+              className="btn btn-outline-secondary"
+              onClick={() => setShowPassword((prev: boolean) => !prev)}
+              tabIndex={-1}
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
           {formik.touched.password && formik.errors.password ? (
             <div className="text-danger">{formik.errors.password}</div>
           ) : null}
+          <div className="mt-2 text-end">
+            <Link
+              to="/forgot-password"
+              className="text-decoration-none text-primary"
+            >
+              Forgot my password?
+            </Link>
+          </div>
         </div>
         <button type="submit" className="btn btn-primary">
           Submit

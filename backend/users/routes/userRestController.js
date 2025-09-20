@@ -61,6 +61,50 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+// Update User (Admin Only)
+router.put("/:id", auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updateData = req.body;
+    let userInfo = req.user;
+    if (!userInfo.isAdmin) {
+      return res
+        .status(403)
+        .send("Access Denied: Admins Only Allowed To Update Users");
+    }
+    const user = await require("../models/mongodb/User").findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true }
+    );
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
+// Set Admin (Admin Only)
+router.patch("/:id/admin", auth, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { isAdmin } = req.body;
+    let userInfo = req.user;
+    if (!userInfo.isAdmin) {
+      return res
+        .status(403)
+        .send("Access Denied: Admins Only Allowed To Set Admin");
+    }
+    const user = await require("../models/mongodb/User").findByIdAndUpdate(
+      id,
+      { isAdmin },
+      { new: true }
+    );
+    res.status(200).send(user);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+});
+
 // Delete User
 router.delete("/:id", async (req, res) => {
   try {

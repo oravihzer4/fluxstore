@@ -1,10 +1,16 @@
 const { generateAuthToken } = require("../../auth/providers/jwt");
 const User = require("./mongodb/User");
+const { generateUserPassword, comparePassword } = require("../helpers/bcrypt");
 
 // Register new User
 const registerUser = async (newUser) => {
   try {
-    let user = new User(newUser);
+    // Hash password before saving
+    const userToSave = {
+      ...newUser,
+      password: generateUserPassword(newUser.password),
+    };
+    let user = new User(userToSave);
     user = await user.save();
     return user;
   } catch (error) {
@@ -48,7 +54,9 @@ const loginUser = async (email, password) => {
     if (!userFromDB) {
       throw new Error("Authentication Error: User not exist");
     }
-    if (userFromDB.password !== password) {
+    // Use bcrypt compare for password check
+    const isMatch = comparePassword(password, userFromDB.password);
+    if (!isMatch) {
       throw new Error("Authentication Error: Invalid password");
     }
     const token = generateAuthToken(userFromDB);

@@ -6,10 +6,12 @@ import {
   deleteProduct,
   updateProduct,
 } from "../../Services/productsService";
+import axios from "axios";
 import type { Product } from "../../interfaces/products/Product";
 
 const AdminProducts: FunctionComponent = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
@@ -74,6 +76,14 @@ const AdminProducts: FunctionComponent = () => {
 
   useEffect(() => {
     fetchProducts();
+    // Fetch orders for admin
+    const token = localStorage.getItem("x-auth-token");
+    axios
+      .get(`${import.meta.env.VITE_API_BASE}orders`, {
+        headers: { "x-auth-token": token || "" },
+      })
+      .then((res) => setOrders(res.data))
+      .catch(() => setOrders([]));
   }, []);
 
   const handleDelete = (id: string) => {
@@ -98,60 +108,82 @@ const AdminProducts: FunctionComponent = () => {
         ) : error ? (
           <div className="alert alert-danger">{error}</div>
         ) : (
-          <div className="table-responsive">
-            <table className="table table-bordered table-hover align-middle bg-white">
-              <thead className="table-primary">
-                <tr>
-                  <th>Title</th>
-                  <th>Description</th>
-                  <th>Price</th>
-                  <th>Image</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {products.map((product, idx) => (
-                  <tr key={product._id || idx}>
-                    <td>{product.title}</td>
-                    <td>{product.description}</td>
-                    <td>{product.price}</td>
-                    <td>
-                      {product.image ? (
-                        <img
-                          src={product.image}
-                          alt={product.title}
-                          style={{ width: 40, height: 40, borderRadius: "8px" }}
-                        />
-                      ) : (
-                        <span>No Image</span>
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        className="btn btn-primary btn-sm me-2"
-                        onClick={() => openEditModal(product)}
-                        disabled={!product._id}
-                      >
-                        Edit
-                      </button>
-                      <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => product._id && handleDelete(product._id)}
-                        disabled={!product._id}
-                      >
-                        Delete
-                      </button>
-                    </td>
+          <>
+            {/* Orders table removed. Only products table below. */}
+            <div className="table-responsive">
+              <h4 className="fw-bold mb-3">Products</h4>
+              <table className="table table-bordered table-hover align-middle bg-white">
+                <thead className="table-primary">
+                  <tr>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Price</th>
+                    <th>Image</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="d-flex justify-content-center mt-5">
-              <Link to="/adminDashboard" className="btn btn-danger">
-                Back to Admin Dashboard
-              </Link>
+                </thead>
+                <tbody>
+                  {products.map((product, idx) => (
+                    <tr key={product._id || idx}>
+                      <td>{product.title}</td>
+                      <td>{product.description}</td>
+                      <td>{product.price}</td>
+                      <td>
+                        {product.image ? (
+                          typeof product.image === "string" ? (
+                            <img
+                              src={product.image}
+                              alt={product.title}
+                              style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: "8px",
+                              }}
+                            />
+                          ) : (
+                            <img
+                              src={product.image.url}
+                              alt={product.image.alt || product.title}
+                              style={{
+                                width: 40,
+                                height: 40,
+                                borderRadius: "8px",
+                              }}
+                            />
+                          )
+                        ) : (
+                          <span>No Image</span>
+                        )}
+                      </td>
+                      <td>
+                        <button
+                          className="btn btn-primary btn-sm me-2"
+                          onClick={() => openEditModal(product)}
+                          disabled={!product._id}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="btn btn-danger btn-sm"
+                          onClick={() =>
+                            product._id && handleDelete(product._id)
+                          }
+                          disabled={!product._id}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <div className="d-flex justify-content-center mt-5">
+                <Link to="/adminDashboard" className="btn btn-danger">
+                  Back to Admin Dashboard
+                </Link>
+              </div>
             </div>
-          </div>
+          </>
         )}
         {/* Edit Modal */}
         {editProduct && (
@@ -210,7 +242,11 @@ const AdminProducts: FunctionComponent = () => {
                         type="text"
                         className="form-control"
                         name="image"
-                        value={editForm.image || ""}
+                        value={
+                          typeof editForm.image === "string"
+                            ? editForm.image
+                            : editForm.image?.url || ""
+                        }
                         onChange={handleEditChange}
                       />
                     </div>
