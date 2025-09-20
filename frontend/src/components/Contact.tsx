@@ -38,7 +38,7 @@ const Contact: FunctionComponent = () => {
             <div className="mb-4 d-flex align-items-center gap-3">
               <FaGithub className="text-dark fs-2" />
               <a
-                href="https://github.com/yourusername"
+                href="https://github.com/oravihzer4"
                 target="_blank"
                 rel="noreferrer"
                 className="fs-5 text-decoration-none text-dark fw-semibold"
@@ -49,15 +49,16 @@ const Contact: FunctionComponent = () => {
             <div className="mb-4 d-flex align-items-center gap-3">
               <FaEnvelope className="text-danger fs-2" />
               <a
-                href="mailto:your@email.com"
+                href="oravihzer4@gmail.com"
                 className="fs-5 text-decoration-none text-dark fw-semibold"
               >
                 Email Us
+                <span className="opacity-25"> - oravihzer4@gmail.com</span>
               </a>
             </div>
             <div className="mb-4 d-flex align-items-center gap-3">
               <FaPhone className="text-success fs-2" />
-              <span className="fs-5 fw-semibold">+972-54-123-4567</span>
+              <span className="fs-5 fw-semibold">+972-54-592-0145</span>
             </div>
             <div className="text-center mt-4">
               <p className="small">
